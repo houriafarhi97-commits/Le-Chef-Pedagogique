@@ -1,0 +1,146 @@
+/* تنسيقات عامة */
+body {
+    font-family: 'Tajawal', 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* القسم الرئيسي (Hero) */
+.hero-section {
+    background: linear-gradient(135deg, #2d1b0e 0%, #5a3a2b 50%, #8b5e3c 100%);
+    padding: 100px 0;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '🍰';
+    position: absolute;
+    font-size: 300px;
+    opacity: 0.05;
+    bottom: -50px;
+    right: -50px;
+}
+
+.hero-section h1 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-section .lead {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* البطاقات */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    background: #fff8f0;
+}
+
+/* الأقسام */
+section {
+    padding: 60px 0;
+}
+
+section:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* روابط التنقل */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* عناوين */
+h2 {
+    color: #2d1b0e;
+    font-weight: bold;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5e3c, #d4a373);
+    border-radius: 2px;
+}
+
+/* التذييل */
+footer {
+    background: linear-gradient(135deg, #1a0f0a, #2d1b0e) !important;
+}
+
+/* أزرار */
+.btn-warning {
+    background: #d4a373;
+    border: none;
+    color: #2d1b0e;
+    font-weight: bold;
+    padding: 12px 40px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    background: #e8c9a0;
+    transform: scale(1.05);
+    color: #1a0f0a;
+}
+
+/* مربع البحث */
+.form-control {
+    border-radius: 50px;
+    border: 2px solid #d4a373;
+}
+
+.form-control:focus {
+    border-color: #8b5e3c;
+    box-shadow: 0 0 0 0.2rem rgba(139, 94, 60, 0.25);
+}
+
+.btn-outline-light {
+    border-radius: 50px;
+}
+
+/* توافق مع الهاتف */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 0;
+        min-height: 60vh;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.1rem;
+    }
+    
+    .card {
+        margin-bottom: 15px;
+    }
+}
