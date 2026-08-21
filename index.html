@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -19,14 +20,14 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">تحديث الصفحة الرئيسية بهيكل البرامج الثلاثة الجديد
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="#programs">البرامج</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">عن المنصة</a></li>
                     <li class="nav-item"><a class="nav-link" href="#teacher">قسم الأستاذ</a></li>
                     <li class="nav-item"><a class="nav-link" href="#student">قسم المتربص</a></li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="ابحث عن درس..." aria-label="Search">
+                <form class="d-flex" id="searchForm">
+                    <input class="form-control me-2" type="search" id="searchInput" placeholder="ابحث عن درس، برنامج، أو وحدة..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">🔍</button>
                 </form>
             </div>
@@ -39,9 +40,41 @@
             <h1 class="display-3 fw-bold">🍰 الشيف البيداغوجي</h1>
             <p class="lead">منصة تعليمية رقمية متخصصة في التكوين المهني – صناعة الحلويات</p>
             <p class="mt-3">وفق المقاربة بالكفاءات <strong>APC</strong></p>
-            <a href="#programs" class="btn btn-warning btn-lg mt-3">استكشف البرامج</a>
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-6">
+                    <form class="d-flex" id="searchFormHero">
+                        <input class="form-control form-control-lg me-2" type="search" id="searchInputHero" placeholder="ابحث عن درس، برنامج، أو وحدة...">
+                        <button class="btn btn-warning btn-lg" type="submit">🔍 بحث</button>
+                    </form>
+                </div>
+            </div>
+            <a href="#programs" class="btn btn-warning btn-lg mt-4">استكشف البرامج</a>
         </div>
     </header>
+
+    <!-- إحصائيات -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h3>3+</h3>
+                    <p>برامج رئيسية</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>4+</h3>
+                    <p>وحدات تعليمية</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>42+</h3>
+                    <p>دروس تفاعلية</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>84+</h3>
+                    <p>ساعة تكوينية</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- قسم تعريف المنصة -->
     <section id="about" class="py-5">
@@ -65,7 +98,7 @@
         </div>
     </section>
 
-    <!-- قسم البرامج (الهيكل الثلاثي) -->
+    <!-- قسم البرامج -->
     <section id="programs" class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center mb-5">📚 برامج التكوين المهني في صناعة الحلويات</h2>
@@ -76,7 +109,7 @@
                     <div class="card p-4 text-center border-warning">
                         <h3>👩‍🍳 برنامج المرأة الماكثة بالبيت</h3>
                         <p class="lead">تكوين تطبيقي 100% – يومان في الأسبوع</p>
-                        <p>يشمل: الحلويات التقليدية، الشرقية، والعصرية.</p>
+                        <p>يشمل: الحلويات التقليدية، الشرقية، والغربية.</p>
                         <a href="program-woman.html" class="btn btn-warning btn-lg">استكشف البرنامج</a>
                     </div>
                 </div>
@@ -94,7 +127,7 @@
                 </div>
             </div>
 
-            <!-- برنامج الحضوري (التكوين المتخصص) -->
+            <!-- برنامج الحضوري -->
             <div class="row">
                 <div class="col-12">
                     <div class="card p-4 text-center border-success">
@@ -131,5 +164,37 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // دالة البحث
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchForm = document.getElementById('searchForm');
+            const searchInputHero = document.getElementById('searchInputHero');
+            const searchFormHero = document.getElementById('searchFormHero');
+
+            function performSearch(query) {
+                if (!query || query.trim() === '') {
+                    alert('الرجاء كتابة كلمة للبحث.');
+                    return;
+                }
+                // توجيه المستخدم إلى صفحة البرامج مع معامل البحث
+                window.location.href = 'programs.html?search=' + encodeURIComponent(query);
+            }
+
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    performSearch(searchInput.value);
+                });
+            }
+
+            if (searchFormHero) {
+                searchFormHero.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    performSearch(searchInputHero.value);
+                });
+            }
+        });
+    </script>
 </body>
-</html>
+</html>ايضافة مربع بحث ةاحصائيات في الصفحة الرئيسية
