@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشيف البيداغوجي – منصة التكوين المهني</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Tajawal', 'Segoe UI', system-ui, sans-serif; background: #faf8f5; }
+        .shadow-soft { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .transition-smooth { transition: all 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.10); }
+        .watermark { opacity: 0.05; font-size: 1.2rem; pointer-events: none; user-select: none; }
+        .badge-pending { background: #fef3c7; color: #92400e; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+        .badge-reviewed { background: #d1fae5; color: #065f46; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+        .badge-draft { background: #e5e7eb; color: #4b5563; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+        .badge-pending-dev { background: #e0f2fe; color: #0369a1; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+        .tech-sheet-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; background: white; margin-bottom: 0.8rem; }
+        .tech-sheet-card h6 { font-weight: 700; color: #1f2937; margin-top: 0.75rem; margin-bottom: 0.25rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 0.2rem; }
+        .tech-sheet-card ul, .tech-sheet-card ol { padding-right: 1.2rem; font-size: 0.9rem; }
+        .accordion-btn { background: #f9f7f4; border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.6rem 1rem; width: 100%; text-align: right; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; cursor: pointer; }
+        .accordion-btn:hover { background: #f3f0ea; }
+        .accordion-btn img { border-radius: 6px; object-fit: cover; width: 36px; height: 36px; }
+        .accordion-content { padding: 0.5rem 0.5rem 1rem; }
+        .eval-grid td, .eval-grid th { text-align: center; vertical-align: middle; font-size: 0.85rem; padding: 0.25rem 0.2rem; }
+        .video-placeholder { background: #f1f3f5; border: 1px dashed #ced4da; border-radius: 6px; padding: 0.4rem 0.8rem; text-align: center; color: #6c757d; font-size: 0.85rem; }
+        .footer-watermark { opacity: 0.15; font-size: 0.65rem; letter-spacing: 1px; }
+        .program-card { border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; background: white; cursor: pointer; transition: all 0.3s ease; }
+        .program-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+        .admin-panel { background: #f9f7f4; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; margin-top: 1.5rem; }
+        .admin-panel input, .admin-panel select, .admin-panel textarea { width: 100%; padding: 0.4rem 0.6rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; background: white; }
+        .admin-panel label { font-weight: 600; font-size: 0.85rem; margin-top: 0.3rem; display: block; }
+        .btn-admin { padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.8rem; border: none; cursor: pointer; transition: 0.2s; }
+        .btn-admin:hover { opacity: 0.8; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .ingredient-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .ingredient-item { background: #f9f7f4; padding: 0.2rem 0.6rem; border-radius: 6px; border: 1px solid #e5e7eb; }
+        .sub-program-card { border-right: 4px solid #b8860b; }
+        @media print {
+            .no-print { display: none !important; }
+            .page-section { display: block !important; }
+            body { background: white; font-size: 12pt; }
+            .tech-sheet-card { border: 1px solid #ccc; box-shadow: none; page-break-inside: avoid; }
+            .accordion-content { display: block !important; }
+            .accordion-btn { background: none !important; border: none !important; cursor: default; }
+            .accordion-btn span:last-child { display: none; }
+            .admin-panel, .search-bar, .nav-actions { display: none !important; }
+        }
+        @media (max-width: 640px) {
+            .accordion-btn { font-size: 0.85rem; padding: 0.4rem 0.6rem; }
+            .accordion-btn img { width: 28px; height: 28px; }
+            .tech-sheet-card { padding: 0.8rem; }
+            .tech-sheet-card h6 { font-size: 0.9rem; }
+            .tech-sheet-card ul, .tech-sheet-card ol { font-size: 0.8rem; padding-right: 0.8rem; }
+            .eval-grid td, .eval-grid th { font-size: 0.7rem; padding: 0.15rem 0.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🍰</span>
+                    <span class="font-bold text-lg text-gray-800">الشيف البيداغوجي</span>
+                    <span class="text-xs text-gray-500 hidden sm:inline">| حورية فرحي</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="navigateTo('home')" class="text-sm text-gray-600 hover:text-amber-700 transition">🏠 الرئيسية</button>
+                    <button onclick="toggleAdmin()" class="text-sm text-gray-600 hover:text-amber-700 transition">⚙️ إدارة</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <header class="bg-gradient-to-l from-amber-50 to-white border-b border-amber-100 py-6 no-print relative">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">🍰 منصة <span class="text-amber-700">الشيف البيداغوجي</span></h1>
+            <p class="text-gray-600 mt-1 text-sm max-w-2xl mx-auto">منصة تكوين مهني جزائرية متخصصة في صناعة الحلويات التقليدية وفق المقاربة بالكفاءات</p>
+            <div class="text-xs text-gray-500 mt-2">إعداد الأستاذة: <strong class="text-amber-800">حورية فرحي</strong> © 2026</div>
+            <div class="watermark text-4xl font-bold text-gray-300 absolute inset-0 flex items-center justify-center pointer-events-none">حورية فرحي</div>
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <section id="page-home" class="page-section active">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">📚 برامج التكوين المهني</h2>
+                <div class="flex items-center gap-2 search-bar">
+                    <input type="text" id="globalSearch" placeholder="🔎 ابحث عن درس أو حلوى..." class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-48 sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-400" oninput="performSearch(this.value)">
+                    <button onclick="clearSearch()" class="text-xs text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="programList"></div>
+        </section>
+        <section id="page-program" class="page-section">
+            <div class="flex items-center gap-3 mb-4">
+                <button onclick="navigateTo('home')" class="text-sm text-amber-700 hover:text-amber-900 flex items-center gap-1 no-print">← العودة إلى الرئيسية</button>
+                <span class="text-gray-300">|</span>
+                <span class="text-sm text-gray-500" id="programBreadcrumb">البرنامج</span>
+            </div>
+            <div id="subProgramsContainer" style="display:none;">
+                <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6 mb-6 relative">
+                    <div class="watermark absolute inset-0 flex items-center justify-center pointer-events-none text-4xl font-bold text-gray-300 opacity-10">حورية فرحي</div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold text-gray-800" id="parentProgramTitle">برنامج المرأة الماكثة بالبيت</h3>
+                        <p class="text-gray-500 mt-1">اختر المسار الذي ترغب في الالتحاق به</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="subProgramList"></div>
+            </div>
+            <div id="programDetailContainer" style="display:none;">
+                <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6 mb-8 relative">
+                    <div class="watermark absolute inset-0 flex items-center justify-center pointer-events-none text-4xl font-bold text-gray-300 opacity-10">حورية فرحي</div>
+                    <div class="relative z-10">
+                        <div class="flex flex-wrap items-start justify-between gap-4">
+                            <div><h3 class="text-2xl font-bold text-gray-800" id="programTitle">برنامج الحلويات التقليدية</h3><p class="text-gray-500 mt-1" id="programDesc">مقياس مهني ضمن التكوين في صناعة الحلويات التقليدية الجزائرية</p></div>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-amber-100 text-amber-800 px-4 py-1 rounded-full text-sm font-semibold" id="programHours">84 ساعة</span>
+                                <span class="bg-gray-100 text-gray-600 px-4 py-1 rounded-full text-sm" id="programType">كفاءة مهنية</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-600">
+                            <div><strong>المجال:</strong> <span id="programField">صناعة الحلويات التقليدية الجزائرية</span></div>
+                            <div><strong>المكتسبات القبلية:</strong> <span id="programPrereq">MC1 – MC2</span></div>
+                            <div><strong>الكفاءة البعدية:</strong> <span id="programPostreq">MQ2</span></div>
+                            <div><strong>الحالة:</strong> <span id="programStatus" class="badge-pending">قيد التدقيق</span></div>
+                        </div>
+                        <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">إعداد الأستاذة: حورية فرحي © 2026</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6 mb-8">
+                    <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">⏱️ التوزيع الزمني</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right" id="timeTable">
+                            <thead class="bg-gray-50 text-gray-600"><tr><th class="p-2 border">المرحلة</th><th class="p-2 border">المدة</th><th class="p-2 border">ملاحظات</th></tr></thead>
+                            <tbody id="timeTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-2 text-center">✅ مجموع الساعات: <span id="totalHoursDisplay">84</span> ساعة</div>
+                </div>
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-gray-800 flex items-center gap-2">📚 الوحدات</h4>
+                        <button onclick="addModule()" class="btn-admin bg-amber-600 text-white px-3 py-1 rounded-lg text-sm no-print">➕ إضافة وحدة</button>
+                    </div>
+                    <div id="modulesContainer"></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6 mb-8">
+                    <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">🧼 النظافة والسلامة المهنية</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-600">
+                        <ul class="list-disc list-inside space-y-1"><li>غسل اليدين جيدًا</li><li>تنظيف وتعقيم سطح العمل</li><li>استعمال أدوات نظيفة</li><li>احترام شروط حفظ المواد الأولية</li></ul>
+                        <ul class="list-disc list-inside space-y-1"><li>التأكد من صلاحية المواد</li><li>استعمال الفرن والمعدات بطريقة آمنة</li><li>ارتداء اللباس المهني المناسب</li></ul>
+                    </div>
+                    <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">إعداد الأستاذة: حورية فرحي © 2026</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6 mb-8">
+                    <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">⭐ معايير تقييم المنتوج النهائي</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right" id="evalTable">
+                            <thead class="bg-gray-50 text-gray-600"><tr><th class="p-2 border">المعيار</th><th class="p-2 border">مؤشر النجاح</th></tr></thead>
+                            <tbody id="evalTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">إعداد الأستاذة: حورية فرحي © 2026</div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
+                        <h5 class="font-bold text-gray-800 mb-2 flex items-center gap-2">📝 أسئلة نظرية</h5>
+                        <ul class="text-sm text-gray-600 list-disc list-inside space-y-1" id="theoryQuestions"></ul>
+                        <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">حورية فرحي © 2026</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6">
+                        <h5 class="font-bold text-gray-800 mb-2 flex items-center gap-2">👩‍🍳 تطبيق عملي</h5>
+                        <p class="text-sm text-gray-600">يُطلب من المتكوّن اختيار إحدى حلويات المقياس وإنجازها ابتداءً من تحضير المواد، التحضير، التشكيل، الطهي، التشطيب، والتقديم.</p>
+                        <p class="text-sm text-gray-600 mt-2">ويتم التقييم باستعمال شبكة تقييم مهنية.</p>
+                        <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">حورية فرحي © 2026</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-soft border border-gray-100 p-6 mb-8">
+                    <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">🏆 النشاط الشامل</h4>
+                    <p class="text-sm text-gray-600">في نهاية المقياس، ينجز المتكوّن منتوجًا متكاملًا باستعمال المهارات المكتسبة في الدروس السابقة.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 text-sm text-gray-600">
+                        <ul class="list-disc list-inside space-y-1"><li>اختيار الوصفة</li><li>قراءة بطاقة الوصفة</li><li>تحضير المواد</li></ul>
+                        <ul class="list-disc list-inside space-y-1"><li>تنظيم مكان العمل</li><li>تنفيذ المراحل</li><li>التشطيب والتزيين</li></ul>
+                    </div>
+                    <p class="text-sm text-gray-700 mt-3 font-medium">📜 الكفاءة النهائية: ينجز المتكوّن حلوى تقليدية جزائرية قائمة على اللوز وفق الوصفة والتقنيات المهنية، مع احترام الجودة والنظافة والسلامة.</p>
+                    <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">إعداد الأستاذة: حورية فرحي © 2026</div>
+                </div>
+                <div class="flex flex-wrap gap-4 justify-center mt-6 no-print">
+                    <button onclick="goBackFromProgram()" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm">← العودة</button>
+                    <button onclick="window.print()" class="px-6 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition text-sm">🖨️ طباعة البطاقة</button>
+                </div>
+            </div>
+        </section>
+        <section id="adminPanel" class="admin-panel hidden no-print">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-800">🔐 إدارة المحتوى</h3>
+                <button onclick="toggleAdmin()" class="text-sm text-gray-500 hover:text-gray-700">✕ إغلاق</button>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">التعديلات تحفظ في متصفحك (localStorage). لتعديل دائم، انسخ البيانات وأضفها إلى الملف.</p>
+            <div id="adminContent"></div>
+            <div class="mt-4 text-xs text-gray-400">ملاحظة: حفظ التغييرات يتم في localStorage. لإعادة تعيين البيانات، احذف localStorage.</div>
+        </section>
+    </main>
+    <footer class="bg-white border-t border-gray-200 py-4 mt-6 no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-500">© 2026 الشيف البيداغوجي – التكوين المهني في الجزائر</p>
+            <p class="text-xs text-gray-400 mt-1">🛡️ من إعداد الأستاذة: <strong class="text-amber-700">حورية فرحي</strong></p>
+            <p class="footer-watermark mt-2">حورية فرحي | الشيف البيداغوجي © 2026</p>
+        </div>
+    </footer>
+    <script>
+        // =========================================================================
+        // 1. البطاقات التقنية (MQ1)
+        // =========================================================================
+        const DEFAULT_SHEETS = [
+            {
+                id: 'sheet_baklava',
+                name: 'البقلاوة الجزائرية التقليدية',
+                objective: 'أن يكون المتكوّن قادرًا على إعداد بقلاوة جزائرية تقليدية...',
+                prerequisites: 'معرفة أنواع الطحين، تحضير العجائن الأساسية، تحضير العسيلة',
+                tools: 'وعاء للعجن، صينية فرن، فرشاة دهن، سكين للتقطيع',
+                ingredients: [
+                    { name: 'فرينة', amount: 4, unit: 'كيلات' },
+                    { name: 'سمن مذاب وبارد', amount: 1, unit: 'كيلة' },
+                    { name: 'ملح', amount: 1, unit: 'قرصة' },
+                    { name: 'ماء وماء زهر (نصفها ماء زهر)', amount: 1, unit: 'كيلة' },
+                    { name: 'لوز مرحي', amount: 3, unit: 'كيلات' },
+                    { name: 'سكر', amount: 0.5, unit: 'كيلة' },
+                    { name: 'سكر للعسيلة', amount: 3, unit: 'كيلات' },
+                    { name: 'ماء للعسيلة', amount: 2, unit: 'كيلتان' }
+                ],
+                steps: ['توضع الفرينة في وعاء، تضاف قرصة الملح.', 'يضاف السمن المذاب والبارد، وتُقرص الفرينة جيدًا بالسمن حتى تتشربه.', 'تجمع العجينة تدريجيًا بالماء وماء الزهر، وتعجن دون إفراط.', 'تترك لترتاح، ثم تقسم إلى كريات.', 'تفرد الرقائق إلى طبقات رقيقة، وتدهن الصينية بالسمن.', 'توضع الطبقات مع دهنها بالسمن، وتوضع الحشوة في الوسط، وتغطى ببقية الرقائق.', 'تدهن الوجه بالسمن، وتقطع قبل الطهي.', 'تطهى في فرن مناسب حتى تتحمر وتصبح ذهبية.', 'تسقى بالعسيلة بعد إخراجها من الفرن.'],
+                cooking: 'فرن على 180° مئوية، 40-50 دقيقة.',
+                commonMistakes: 'استعمال السمن ساخنًا، الإفراط في عجن العجينة، الرقائق السميكة...',
+                corrections: 'استعمال سمن بارد، عجن خفيف، فرد رقيق...',
+                qualityCriteria: 'طبقات رقيقة ومنفصلة، لون ذهبي متجانس، حشوة متوازنة...',
+                hygiene: 'غسل اليدين، تعقيم الأدوات، الحذر من السمن الساخن.',
+                duration: '90 دقيقة',
+                yield: '30 قطعة',
+                storage: 'علبة محكمة الإغلاق، درجة حرارة الغرفة أسبوع.',
+                serving: 'طبق تقديم، مزينة بالفستق.',
+                evalQuestions: ['ما هي درجة حرارة الفرن؟', 'لماذا تُترك العجينة لترتاح؟'],
+                practicalActivity: 'إنجاز بقلاوة كاملة وفق البطاقة التقنية.',
+                video: 'https://www.youtube.com/watch?v=Dh-fAuU6UG4',
+                image: 'https://i.ytimg.com/vi/Dh-fAuU6UG4/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_kafta',
+                name: 'الكفتة الجزائرية',
+                objective: 'تمكين المتكوّن من إعداد حلوة الكفتة بعجينة اللوز والحشو...',
+                prerequisites: 'تحضير عجينة اللوز، تحضير الحشوات البسيطة',
+                tools: 'وعاء خلط، صينية، أدوات تشكيل',
+                ingredients: [
+                    { name: 'لوز مرحي', amount: 3, unit: 'كيلات' },
+                    { name: 'سكر ناعم', amount: 2, unit: 'كيلتان' },
+                    { name: 'زبدة ذائبة', amount: 0.05, unit: 'غ' },
+                    { name: 'ماء زهر', amount: 3, unit: 'ملاعق' },
+                    { name: 'فانيليا', amount: 1, unit: 'ظرف' },
+                    { name: 'بسكويت مرحي', amount: 1, unit: 'كيلة' },
+                    { name: 'مكسرات مطحونة', amount: 0.5, unit: 'كيلة' }
+                ],
+                steps: ['تحضير عجينة اللوز.', 'تحضير الحشو.', 'تشكيل الحشو على شكل حربوش.', 'فرد العجينة، وضع الحشو، غلق العجينة.', 'تقطيع وتشكيل وتزيين.'],
+                cooking: 'لا يحتاج فرن (تُشكل يدوياً)',
+                commonMistakes: 'عجينة لينة، تشقق السطح، عدم توازن العجينة والحشو.',
+                corrections: 'إضافة لوز إضافي، تبريد العجينة، تعديل كمية الحشو.',
+                qualityCriteria: 'عجينة ناعمة، حشو متماسك، انتظام القطع.',
+                hygiene: 'غسل اليدين، تعقيم الأدوات.',
+                duration: '60 دقيقة',
+                yield: '20 قطعة',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['ما هي مكونات عجينة اللوز؟'],
+                practicalActivity: 'إنجاز الكفتة وفق البطاقة التقنية.',
+                video: 'https://www.youtube.com/watch?v=UCVcmQB1hx8',
+                image: 'https://i.ytimg.com/vi/UCVcmQB1hx8/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_fruit',
+                name: 'حلوة الفاكهة',
+                objective: 'تشكيل عجينة اللوز على هيئة فواكه مع التحكم في التلوين.',
+                prerequisites: 'تحضير عجينة اللوز، استعمال الألوان الغذائية',
+                tools: 'قوالب فواكه، أدوات نحت، فرشاة تلوين',
+                ingredients: [{ name: 'عجينة اللوز', amount: 1, unit: 'كغ' }, { name: 'ألوان غذائية طبيعية', amount: 1, unit: 'مجموعة' }],
+                steps: ['تقسيم العجينة.', 'تلوين كل جزء.', 'تشكيل الفواكه يدوياً أو بالقوالب.'],
+                cooking: 'لا يحتاج طهي',
+                commonMistakes: 'قيد التدقيق',
+                corrections: 'قيد التدقيق',
+                qualityCriteria: 'دقة التشكيل، توازن الألوان، مظهر واقعي',
+                hygiene: 'غسل اليدين، استعمال ألوان طبيعية',
+                duration: 'قيد التدقيق',
+                yield: 'قيد التدقيق',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['قيد التدقيق'],
+                practicalActivity: 'قيد التدقيق',
+                video: 'https://www.youtube.com/watch?v=3JXH5VUdJZ8',
+                image: 'https://i.ytimg.com/vi/3JXH5VUdJZ8/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_thoumia',
+                name: 'الثومية',
+                objective: 'إتقان إعداد وتشكيل الثومية التقليدية.',
+                prerequisites: 'تحضير عجينة اللوز',
+                tools: 'قيد التدقيق',
+                ingredients: [{ name: 'لوز', amount: 3, unit: 'كيلات' }, { name: 'سكر ناعم', amount: 2, unit: 'كيلتان' }, { name: 'زبدة', amount: 0.05, unit: 'غ' }, { name: 'ماء زهر', amount: 1, unit: 'ملعقة' }],
+                steps: ['تحضير العجينة', 'تشكيل فصوص', 'التلوين والتشطيب'],
+                cooking: 'لا يحتاج طهي',
+                commonMistakes: 'قيد التدقيق',
+                corrections: 'قيد التدقيق',
+                qualityCriteria: 'نعومة العجينة، دقة شكل الفصوص، تناسق الحجم، ألوان هادئة ومتناسقة، تشطيب نظيف',
+                hygiene: 'قيد التدقيق',
+                duration: 'قيد التدقيق',
+                yield: 'قيد التدقيق',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['قيد التدقيق'],
+                practicalActivity: 'قيد التدقيق',
+                video: 'https://www.youtube.com/watch?v=8r5TZcMYtC8',
+                image: 'https://i.ytimg.com/vi/8r5TZcMYtC8/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_mouchkila',
+                name: 'حلوة المشكلة',
+                objective: 'تشكيل حلوى المشكلة بأشكال متنوعة مع التحكم في العجينة.',
+                prerequisites: 'قيد التدقيق',
+                tools: 'قيد التدقيق',
+                ingredients: [{ name: 'لوز', amount: 1, unit: 'كغ' }, { name: 'سكر', amount: 0.5, unit: 'كغ' }, { name: 'زبدة', amount: 0.1, unit: 'كغ' }, { name: 'مكسرات', amount: 0.2, unit: 'كغ' }],
+                steps: ['تحضير العجينة', 'تحضير الحشو', 'التشكيل', 'التلوين', 'التزيين', 'التشطيب'],
+                cooking: 'لا يحتاج طهي',
+                commonMistakes: 'قيد التدقيق',
+                corrections: 'قيد التدقيق',
+                qualityCriteria: 'دقة الأشكال، تناسق الألوان، ثبات الشكل، نعومة العجينة، نظافة التشطيب',
+                hygiene: 'قيد التدقيق',
+                duration: 'قيد التدقيق',
+                yield: 'قيد التدقيق',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['قيد التدقيق'],
+                practicalActivity: 'قيد التدقيق',
+                video: 'https://www.youtube.com/watch?v=AZmwtp-3cME',
+                image: 'https://i.ytimg.com/vi/AZmwtp-3cME/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_araiche',
+                name: 'العرايش الجزائرية',
+                objective: 'إعداد العرايش، حشوها، تشكيلها، خبزها، وتغطيتها بالطلية.',
+                prerequisites: 'قيد التدقيق',
+                tools: 'قيد التدقيق',
+                ingredients: [{ name: 'فرينة', amount: 3, unit: 'كيلات' }, { name: 'سمن', amount: 1, unit: 'كيلة' }, { name: 'زيت', amount: 0.5, unit: 'كيلة' }, { name: 'حليب', amount: 0.5, unit: 'كيلة' }, { name: 'لوز', amount: 3, unit: 'كيلات' }],
+                steps: ['تحضير العجينة وتركها ترتاح', 'تحضير الحشو', 'تشكيل العرايش', 'الخبز', 'الطلية', 'التزيين'],
+                cooking: 'قيد التدقيق',
+                commonMistakes: 'قيد التدقيق',
+                corrections: 'قيد التدقيق',
+                qualityCriteria: 'شكل متناسق، عجينة طرية، حشو متوازن، طلية ناعمة ومتجانسة، تزيين نظيف وأنيق',
+                hygiene: 'قيد التدقيق',
+                duration: 'قيد التدقيق',
+                yield: 'قيد التدقيق',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['قيد التدقيق'],
+                practicalActivity: 'قيد التدقيق',
+                video: 'https://www.youtube.com/watch?v=72H_GLQqcRQ',
+                image: 'https://i.ytimg.com/vi/72H_GLQqcRQ/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_tcharak',
+                name: 'التشاراك التقليدي',
+                objective: 'إعداد التشاراك التقليدي، تشكيله على هيئة هلال وخبزه.',
+                prerequisites: 'قيد التدقيق',
+                tools: 'قيد التدقيق',
+                ingredients: [{ name: 'فرينة', amount: 3, unit: 'كيلات' }, { name: 'زبدة', amount: 1, unit: 'كيلة' }, { name: 'سكر', amount: 0.5, unit: 'كيلة' }, { name: 'لوز', amount: 2, unit: 'كيلتان' }],
+                steps: ['تحضير العجينة وتركها ترتاح', 'تحضير الحشو', 'فرد العجينة وتقطيعها إلى دوائر', 'وضع الحشو', 'غلق العجينة', 'تشكيلها على هيئة هلال', 'خبزها في الفرن', 'تغطيتها بالسكر الناعم'],
+                cooking: 'يُخبز في الفرن، ولا يُقلى',
+                commonMistakes: 'قيد التدقيق',
+                corrections: 'قيد التدقيق',
+                qualityCriteria: 'هلال متناسق، حشو ثابت، عجينة طرية وهشة، لون فاتح مناسب، تغطية متجانسة بالسكر الناعم',
+                hygiene: 'قيد التدقيق',
+                duration: 'قيد التدقيق',
+                yield: 'قيد التدقيق',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['قيد التدقيق'],
+                practicalActivity: 'قيد التدقيق',
+                video: 'https://www.youtube.com/watch?v=r1UjM01Vf8A',
+                image: 'https://i.ytimg.com/vi/r1UjM01Vf8A/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            },
+            {
+                id: 'sheet_herissia',
+                name: 'الهريسية باللوز',
+                objective: 'إعداد الهريسية باللوز مع ضبط القوام والطهي والتسقية.',
+                prerequisites: 'قيد التدقيق',
+                tools: 'قيد التدقيق',
+                ingredients: [{ name: 'لوز', amount: 3, unit: 'كيلات' }, { name: 'سكر', amount: 2, unit: 'كيلتان' }, { name: 'بيض', amount: 4, unit: 'حبات' }, { name: 'زبدة', amount: 0.5, unit: 'كيلة' }, { name: 'ماء زهر', amount: 2, unit: 'ملاعق' }],
+                steps: ['يخفق البيض مع السكر والفانيليا.', 'يضاف اللوز تدريجياً، ثم الزبدة وماء الزهر.', 'تضاف الخميرة، يخلط المزيج حتى التجانس.', 'يوضع في صينية مدهونة، يسوى السطح، يقطع ويزين باللوز.', 'يخبز في فرن متوسط الحرارة.', 'تحضر العسيلة، تسقى الحلوى بعد الطهي.'],
+                cooking: 'قيد التدقيق',
+                commonMistakes: 'قيد التدقيق',
+                corrections: 'قيد التدقيق',
+                qualityCriteria: 'لون ذهبي، قوام متماسك وطري، تشرب متوازن للعسيلة، نكهة واضحة للوز، قطع منتظمة',
+                hygiene: 'قيد التدقيق',
+                duration: 'قيد التدقيق',
+                yield: 'قيد التدقيق',
+                storage: 'قيد التدقيق',
+                serving: 'قيد التدقيق',
+                evalQuestions: ['قيد التدقيق'],
+                practicalActivity: 'قيد التدقيق',
+                video: 'https://www.youtube.com/watch?v=5VbS9yZvNMY',
+                image: 'https://i.ytimg.com/vi/5VbS9yZvNMY/maxresdefault.jpg',
+                status: 'قيد التدقيق'
+            }
+        ];
+
+        // =========================================================================
+        // 2. البرامج والهيكل الهرمي
+        // =========================================================================
+        const DEFAULT_PROGRAM_DATA = {
+            woman_main: {
+                id: 'woman_main',
+                title: 'برنامج المرأة الماكثة بالبيت',
+                desc: 'برنامج شامل لتكوين المرأة الماكثة بالبيت في صناعة الحلويات',
+                field: 'صناعة الحلويات التقليدية والشرقية والغربية',
+                hours: 'قيد التدقيق',
+                type: 'كفاءة مهنية',
+                prereq: 'قيد التدقيق',
+                postreq: 'قيد التدقيق',
+                status: 'قيد التدقيق',
+                parent: true,
+                subPrograms: ['almond_pastry', 'oriental_pastry', 'western_pastry']
+            },
+            apprenticeship: {
+                id: 'apprenticeship',
+                title: 'برنامج التمهين',
+                desc: 'قيد التطوير – سيتم الإعلان عن تفاصيله قريباً',
+                field: 'التكوين المهني عن طريق التمهين',
+                hours: 'قيد التدقيق',
+                type: 'كفاءة مهنية',
+                prereq: 'قيد التدقيق',
+                postreq: 'قيد التدقيق',
+                status: 'قيد التطوير',
+                timeDistribution: [],
+                modules: [],
+                evaluationCriteria: [],
+                theoryQuestions: [],
+                _pending: true,
+                parent: false
+            },
+            fulltime: {
+                id: 'fulltime',
+                title: 'برنامج التكوين الحضوري',
+                desc: 'قيد التطوير – سيتم الإعلان عن تفاصيله قريباً',
+                field: 'التكوين المهني الحضوري',
+                hours: 'قيد التدقيق',
+                type: 'كفاءة مهنية',
+                prereq: 'قيد التدقيق',
+                postreq: 'قيد التدقيق',
+                status: 'قيد التطوير',
+                timeDistribution: [],
+                modules: [],
+                evaluationCriteria: [],
+                theoryQuestions: [],
+                _pending: true,
+                parent: false
+            },
+            almond_pastry: {
+                id: 'almond_pastry',
+                title: 'برنامج الحلويات التقليدية',
+                desc: 'مقياس مهني متخصص في صناعة الحلويات التقليدية الجزائرية باللوز',
+                field: 'صناعة الحلويات التقليدية الجزائرية',
+                hours: 84,
+                type: 'كفاءة مهنية',
+                prereq: 'MC1 – MC2',
+                postreq: 'MQ2',
+                status: 'قيد التدقيق',
+                timeDistribution: [
+                    { stage: 'المقدمة', duration: '1 ساعة', notes: 'عرض شفهي' },
+                    { stage: 'تحضير الحشوة', duration: '10 ساعات', notes: 'تطبيقي' },
+                    { stage: 'إنجاز حلويات اللوز', duration: '29 ساعة', notes: '8 حلويات' },
+                    { stage: 'الطهي', duration: '13 ساعة', notes: 'فرن وقلي' },
+                    { stage: 'التشطيب', duration: '21 ساعة', notes: 'تطبيقي' },
+                    { stage: 'النشاط الشامل', duration: '5 ساعات', notes: 'إنتاج متكامل' },
+                    { stage: 'التقييم', duration: '5 ساعات', notes: 'نظري وعملي' }
+                ],
+                modules: [
+                    {
+                        id: 'module_mq1',
+                        title: 'MQ1 – إعداد حلويات اللوز',
+                        desc: 'إنجاز الحلويات التقليدية الجزائرية المصنوعة من اللوز (84 ساعة)',
+                        status: 'قيد التدقيق',
+                        sheets: DEFAULT_SHEETS.map(s => ({...s}))
+                    },
+                    {
+                        id: 'module_mq2',
+                        title: 'MQ2 – حلويات السميد',
+                        desc: 'قيد التدقيق – سيتم الإعلان عن تفاصيله قريباً',
+                        status: 'قيد التدقيق',
+                        sheets: [],
+                        _pending: true
+                    },
+                    {
+                        id: 'module_mc1',
+                        title: 'MC1 – تكنولوجيا عامة',
+                        desc: 'قيد التدقيق – سيتم الإعلان عن تفاصيله قريباً',
+                        status: 'قيد التدقيق',
+                        sheets: [],
+                        _pending: true
+                    },
+                    {
+                        id: 'module_mc2',
+                        title: 'MC2 – الأمن والسلامة',
+                        desc: 'قيد التدقيق – سيتم الإعلان عن تفاصيله قريباً',
+                        status: 'قيد التدقيق',
+                        sheets: [],
+                        _pending: true
+                    }
+                ],
+                evaluationCriteria: [
+                    { criterion: 'احترام الوصفة', indicator: 'احترام المقادير والمراحل' },
+                    { criterion: 'التنظيم', indicator: 'ترتيب العمل واستغلال الوقت' },
+                    { criterion: 'التشكيل', indicator: 'انتظام ودقة الأشكال' },
+                    { criterion: 'الطهي', indicator: 'لون وقوام مناسب' },
+                    { criterion: 'التشطيب', indicator: 'نظافة ودقة التزيين' },
+                    { criterion: 'الطعم', indicator: 'توازن النكهات' },
+                    { criterion: 'القوام', indicator: 'مناسب لنوع الحلوى' },
+                    { criterion: 'النظافة', indicator: 'احترام قواعد النظافة والسلامة' },
+                    { criterion: 'التقديم', indicator: 'مظهر مهني جذاب' }
+                ],
+                theoryQuestions: [
+                    'ما أهمية وزن المواد الأولية بدقة؟',
+                    'ما دور راحة العجينة؟',
+                    'ما العوامل التي تؤثر في جودة الطهي؟',
+                    'كيف نميز الحلوى المطهية جيدًا؟',
+                    'ما شروط نجاح عجينة اللوز؟',
+                    'ما أهمية التحكم في قوام الحشوة؟',
+                    'ما قواعد النظافة الواجب احترامها أثناء العمل؟'
+                ],
+                parent: false
+            },
+            oriental_pastry: {
+                id: 'oriental_pastry',
+                title: 'برنامج الحلويات الشرقية',
+                desc: 'قيد التطوير – سيتم الإعلان عن تفاصيله قريباً',
+                field: 'صناعة الحلويات الشرقية',
+                hours: 'قيد التدقيق',
+                type: 'كفاءة مهنية',
+                prereq: 'قيد التدقيق',
+                postreq: 'قيد التدقيق',
+                status: 'قيد التطوير',
+                timeDistribution: [],
+                modules: [],
+                evaluationCriteria: [],
+                theoryQuestions: [],
+                _pending: true,
+                parent: false
+            },
+            western_pastry: {
+                id: 'western_pastry',
+                title: 'برنامج الحلويات الغربية',
+                desc: 'قيد التطوير – سيتم الإعلان عن تفاصيله قريباً',
+                field: 'صناعة الحلويات الغربية',
+                hours: 'قيد التدقيق',
+                type: 'كفاءة مهنية',
+                prereq: 'قيد التدقيق',
+                postreq: 'قيد التدقيق',
+                status: 'قيد التطوير',
+                timeDistribution: [],
+                modules: [],
+                evaluationCriteria: [],
+                theoryQuestions: [],
+                _pending: true,
+                parent: false
+            }
+        };
+
+        // =========================================================================
+        // 3. تحميل البيانات ووظائفها
+        // =========================================================================
+        let programData = {};
+        function loadData() {
+            const saved = localStorage.getItem('chef_pedagogique_data');
+            if (saved) {
+                try {
+                    programData = JSON.parse(saved);
+                    if (programData.almond_pastry && programData.almond_pastry.modules && programData.almond_pastry.modules.length > 0) {
+                        if (!programData.almond_pastry.modules[0].sheets || programData.almond_pastry.modules[0].sheets.length === 0) {
+                            programData.almond_pastry.modules[0].sheets = DEFAULT_SHEETS.map(s => ({...s}));
+                        }
+                    }
+                } catch(e) {
+                    programData = JSON.parse(JSON.stringify(DEFAULT_PROGRAM_DATA));
+                    programData.almond_pastry.modules[0].sheets = DEFAULT_SHEETS.map(s => ({...s}));
+                }
+            } else {
+                programData = JSON.parse(JSON.stringify(DEFAULT_PROGRAM_DATA));
+                programData.almond_pastry.modules[0].sheets = DEFAULT_SHEETS.map(s => ({...s}));
+            }
+            saveData();
+        }
+        function saveData() { localStorage.setItem('chef_pedagogique_data', JSON.stringify(programData)); }
+        loadData();
+
+        // =========================================================================
+        // 4. التنقل والعرض
+        // =========================================================================
+        let currentParent = null;
+
+        function navigateTo(page) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            if (page === 'home') {
+                document.getElementById('page-home').classList.add('active');
+                renderPrograms();
+                document.getElementById('subProgramsContainer').style.display = 'none';
+                document.getElementById('programDetailContainer').style.display = 'none';
+            }
+        }
+
+        function getStatusBadge(status) {
+            const map = {
+                'تمت المراجعة': '<span class="badge-reviewed">🟢 تمت المراجعة</span>',
+                'قيد التدقيق': '<span class="badge-pending">🟡 قيد التدقيق</span>',
+                'إعداد الأستاذة': '<span class="badge-draft">🔵 إعداد الأستاذة</span>',
+                'قيد التطوير': '<span class="badge-pending-dev">⏳ قيد التطوير</span>'
+            };
+            return map[status] || `<span class="badge-pending">${status}</span>`;
+        }
+
+        function renderPrograms() {
+            const container = document.getElementById('programList');
+            container.innerHTML = '';
+            const mainPrograms = Object.entries(programData).filter(([key, prog]) => {
+                return prog.parent === true || key === 'apprenticeship' || key === 'fulltime';
+            });
+            mainPrograms.sort((a,b) => {
+                if (a[0] === 'woman_main') return -1;
+                if (b[0] === 'woman_main') return 1;
+                return 0;
+            });
+            mainPrograms.forEach(([key, prog]) => {
+                const isPending = prog._pending || false;
+                const card = document.createElement('div');
+                card.className = 'program-card hover-lift transition-smooth';
+                card.onclick = () => {
+                    if (prog.parent === true) {
+                        selectParentProgram(key);
+                    } else {
+                        if (!isPending) {
+                            alert('هذا البرنامج قيد التطوير، سيتم الإعلان عن تفاصيله قريباً.');
+                        } else {
+                            alert('هذا البرنامج قيد التطوير، سيتم الإعلان عن تفاصيله قريباً.');
+                        }
+                    }
+                };
+                let icon = '🍰';
+                if (prog.parent === true) icon = '📂';
+                else if (isPending) icon = '🔜';
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-2xl">${icon}</div>
+                            <h3 class="font-bold text-lg text-gray-800 mt-1">${prog.title}</h3>
+                            <p class="text-sm text-gray-500 mt-1">${prog.desc}</p>
+                        </div>
+                        <span class="${isPending ? 'badge-pending-dev' : 'bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-semibold'}">${isPending ? '⏳ قيد التطوير' : (prog.hours || '')}</span>
+                    </div>
+                    <div class="mt-2">${getStatusBadge(prog.status)}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectParentProgram(programId) {
+            const prog = programData[programId];
+            if (!prog || prog.parent !== true) return;
+            currentParent = programId;
+            document.getElementById('page-program').classList.add('active');
+            document.getElementById('programBreadcrumb').textContent = prog.title;
+            document.getElementById('subProgramsContainer').style.display = 'block';
+            document.getElementById('programDetailContainer').style.display = 'none';
+            document.getElementById('parentProgramTitle').textContent = prog.title;
+
+            const container = document.getElementById('subProgramList');
+            container.innerHTML = '';
+            prog.subPrograms.forEach(subId => {
+                const sub = programData[subId];
+                if (!sub) return;
+                const isPending = sub._pending || false;
+                const card = document.createElement('div');
+                card.className = 'program-card hover-lift transition-smooth sub-program-card';
+                card.onclick = () => {
+                    if (!isPending) {
+                        selectSubProgram(subId);
+                    } else {
+                        alert('هذا البرنامج قيد التطوير، سيتم الإعلان عن تفاصيله قريباً.');
+                    }
+                };
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="text-2xl">${isPending ? '🔜' : '🍰'}</div>
+                            <h4 class="font-bold text-gray-800">${sub.title}</h4>
+                            <p class="text-sm text-gray-500">${sub.desc}</p>
+                        </div>
+                        <span class="${isPending ? 'badge-pending-dev' : 'bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs'}">${isPending ? '⏳ قيد التطوير' : (sub.hours || '')}</span>
+                    </div>
+                    <div class="mt-2">${getStatusBadge(sub.status)}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectSubProgram(programId) {
+            const prog = programData[programId];
+            if (!prog) return;
+            document.getElementById('subProgramsContainer').style.display = 'none';
+            document.getElementById('programDetailContainer').style.display = 'block';
+            document.getElementById('programBreadcrumb').textContent = prog.title;
+
+            document.getElementById('programTitle').textContent = prog.title;
+            document.getElementById('programDesc').textContent = prog.desc;
+            document.getElementById('programHours').textContent = prog.hours + ' ساعة';
+            document.getElementById('programType').textContent = prog.type;
+            document.getElementById('programField').textContent = prog.field;
+            document.getElementById('programPrereq').textContent = prog.prereq;
+            document.getElementById('programPostreq').textContent = prog.postreq;
+            document.getElementById('programStatus').innerHTML = getStatusBadge(prog.status);
+
+            const tbody = document.getElementById('timeTableBody');
+            tbody.innerHTML = '';
+            let total = 0;
+            if (prog.timeDistribution && prog.timeDistribution.length) {
+                prog.timeDistribution.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td class="p-2 border">${row.stage}</td><td class="p-2 border">${row.duration}</td><td class="p-2 border">${row.notes || ''}</td>`;
+                    tbody.appendChild(tr);
+                    const hours = parseInt(row.duration) || 0;
+                    total += hours;
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">التوزيع الزمني قيد التدقيق</td></tr>`;
+            }
+            document.getElementById('totalHoursDisplay').textContent = total || prog.hours;
+
+            renderModules(prog);
+
+            const evalBody = document.getElementById('evalTableBody');
+            evalBody.innerHTML = '';
+            if (prog.evaluationCriteria && prog.evaluationCriteria.length) {
+                prog.evaluationCriteria.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td class="p-2 border">${item.criterion}</td><td class="p-2 border">${item.indicator}</td>`;
+                    evalBody.appendChild(tr);
+                });
+            } else {
+                evalBody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-gray-400">معايير التقييم قيد التدقيق</td></tr>`;
+            }
+
+            const qContainer = document.getElementById('theoryQuestions');
+            qContainer.innerHTML = '';
+            if (prog.theoryQuestions && prog.theoryQuestions.length) {
+                prog.theoryQuestions.forEach(q => {
+                    const li = document.createElement('li');
+                    li.textContent = q;
+                    qContainer.appendChild(li);
+                });
+            } else {
+                qContainer.innerHTML = '<li class="text-gray-400">قيد التدقيق</li>';
+            }
+        }
+
+        function goBackFromProgram() {
+            if (currentParent) {
+                document.getElementById('programDetailContainer').style.display = 'none';
+                document.getElementById('subProgramsContainer').style.display = 'block';
+                document.getElementById('programBreadcrumb').textContent = programData[currentParent].title;
+                const prog = programData[currentParent];
+                const container = document.getElementById('subProgramList');
+                container.innerHTML = '';
+                prog.subPrograms.forEach(subId => {
+                    const sub = programData[subId];
+                    if (!sub) return;
+                    const isPending = sub._pending || false;
+                    const card = document.createElement('div');
+                    card.className = 'program-card hover-lift transition-smooth sub-program-card';
+                    card.onclick = () => {
+                        if (!isPending) {
+                            selectSubProgram(subId);
+                        } else {
+                            alert('هذا البرنامج قيد التطوير، سيتم الإعلان عن تفاصيله قريباً.');
+                        }
+                    };
+                    card.innerHTML = `
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <div class="text-2xl">${isPending ? '🔜' : '🍰'}</div>
+                                <h4 class="font-bold text-gray-800">${sub.title}</h4>
+                                <p class="text-sm text-gray-500">${sub.desc}</p>
+                            </div>
+                            <span class="${isPending ? 'badge-pending-dev' : 'bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs'}">${isPending ? '⏳ قيد التطوير' : (sub.hours || '')}</span>
+                        </div>
+                        <div class="mt-2">${getStatusBadge(sub.status)}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                navigateTo('home');
+            }
+        }
+
+        // =========================================================================
+        // 5. عرض الوحدات والبطاقات
+        // =========================================================================
+        function renderModules(prog) {
+            const container = document.getElementById('modulesContainer');
+            container.innerHTML = '';
+            if (prog.modules && prog.modules.length) {
+                prog.modules.forEach((mod, idx) => {
+                    const isPending = mod._pending || false;
+                    const modDiv = document.createElement('div');
+                    modDiv.className = 'bg-white rounded-xl shadow-soft border border-gray-100 p-5 mb-4 module-card';
+                    const sheetCount = mod.sheets ? mod.sheets.length : 0;
+                    modDiv.innerHTML = `
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h5 class="font-bold text-gray-800">📘 ${mod.title}</h5>
+                            <span class="text-xs text-gray-400">${sheetCount} بطاقة تقنية ${getStatusBadge(mod.status)}</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">${mod.desc}</p>
+                        ${isPending ? `<p class="text-sm text-amber-600 mt-2">⚠️ هذه الوحدة قيد التدقيق، سيتم إضافة محتواها لاحقاً.</p>` : ''}
+                        ${mod.sheets && mod.sheets.length && !isPending ? `<div class="mt-3 space-y-2" id="sheets-${mod.id}"></div>` : ''}
+                        <div class="flex gap-2 mt-3 no-print">
+                            <button onclick="editModule('${mod.id}')" class="btn-admin bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">✏️ تعديل</button>
+                            <button onclick="deleteModule('${mod.id}')" class="btn-admin bg-red-100 text-red-700 px-2 py-1 rounded text-xs">🗑️ حذف</button>
+                            ${!isPending ? `<button onclick="addSheet('${mod.id}')" class="btn-admin bg-green-100 text-green-700 px-2 py-1 rounded text-xs">➕ إضافة بطاقة</button>` : ''}
+                        </div>
+                        <div class="text-xs text-gray-300 mt-3 border-t border-gray-100 pt-2 text-center">إعداد الأستاذة: حورية فرحي © 2026</div>
+                    `;
+                    container.appendChild(modDiv);
+
+                    if (mod.sheets && mod.sheets.length && !isPending) {
+                        const sheetsContainer = document.getElementById(`sheets-${mod.id}`);
+                        mod.sheets.forEach((sheet, si) => {
+                            const sheetDiv = document.createElement('div');
+                            sheetDiv.className = 'tech-sheet-card';
+                            const statusBadge = getStatusBadge(sheet.status || 'قيد التدقيق');
+                            sheetDiv.innerHTML = `
+                                <button class="accordion-btn" onclick="toggleSheet('${sheet.id}')">
+                                    <img src="${sheet.image || ''}" alt="${sheet.name}" onerror="this.style.display='none'">
+                                    <span class="flex-1 text-right">${statusBadge} ${sheet.name}</span>
+                                    <span class="text-gray-400 text-sm">▼</span>
+                                </button>
+                                <div id="sheet-${sheet.id}" class="accordion-content hidden">
+                                    ${renderSheetContent(sheet)}
+                                    <div class="flex gap-2 mt-3 no-print">
+                                        <button onclick="editSheet('${sheet.id}')" class="btn-admin bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">✏️ تعديل</button>
+                                        <button onclick="deleteSheet('${sheet.id}')" class="btn-admin bg-red-100 text-red-700 px-2 py-1 rounded text-xs">🗑️ حذف</button>
+                                        <button onclick="printSheet('${sheet.id}')" class="btn-admin bg-gray-200 text-gray-700 px-2 py-1 rounded text-xs">🖨️ طباعة</button>
+                                    </div>
+                                    <div class="text-xs text-gray-300 mt-2 border-t border-gray-100 pt-2 text-center">حورية فرحي | الشيف البيداغوجي © 2026</div>
+                                </div>
+                            `;
+                            sheetsContainer.appendChild(sheetDiv);
+                        });
+                    }
+                });
+            } else {
+                container.innerHTML = `<p class="text-gray-400 text-center py-6">لا توجد وحدات مسجلة حالياً.</p>`;
+            }
+        }
+
+        function renderSheetContent(sheet) {
+            let html = '';
+            const fields = [
+                { label: '🎯 الهدف التعلمي', key: 'objective' },
+                { label: '📚 المكتسبات القبلية', key: 'prerequisites' },
+                { label: '🧰 الأدوات والتجهيزات', key: 'tools' },
+                { label: '👩‍🍳 مراحل الإنجاز', key: 'steps', isList: true },
+                { label: '🔥 الطهي ودرجة الحرارة', key: 'cooking' },
+                { label: '⚠️ الأخطاء المحتملة', key: 'commonMistakes' },
+                { label: '🔧 إجراءات التصحيح', key: 'corrections' },
+                { label: '✅ معايير الجودة', key: 'qualityCriteria' },
+                { label: '🧼 النظافة والسلامة', key: 'hygiene' },
+                { label: '⏱️ مدة الإنجاز', key: 'duration' },
+                { label: '📦 المردود', key: 'yield' },
+                { label: '🧊 الحفظ', key: 'storage' },
+                { label: '🍽️ التقديم', key: 'serving' },
+                { label: '📝 أسئلة التقويم', key: 'evalQuestions', isList: true },
+                { label: '👩‍🍳 نشاط تطبيقي', key: 'practicalActivity' }
+            ];
+            fields.forEach(f => {
+                let val = sheet[f.key];
+                if (val) {
+                    if (f.isList && Array.isArray(val)) {
+                        val = `<ul class="list-disc list-inside">${val.map(v => `<li>${v}</li>`).join('')}</ul>`;
+                    }
+                    html += `<h6>${f.label}</h6><div class="mb-2 text-sm text-gray-700">${val}</div>`;
+                }
+            });
+
+            if (sheet.ingredients && Array.isArray(sheet.ingredients) && sheet.ingredients.length > 0) {
+                const sheetId = sheet.id;
+                html += `<h6>⚖️ المقادير (مع حاسبة التعديل)</h6>`;
+                html += `
+                    <div class="mb-2 flex items-center gap-3 flex-wrap">
+                        <label class="text-sm font-semibold">عامل القياس:</label>
+                        <input type="number" id="scale-${sheetId}" value="1" min="0.1" step="0.1" class="border rounded px-2 py-1 w-20" onchange="updateIngredients('${sheetId}')" oninput="updateIngredients('${sheetId}')">
+                        <span class="text-xs text-gray-500">(مثال: 2 = مضاعفة، 0.5 = تنصيف)</span>
+                    </div>
+                    <div id="ingredients-display-${sheetId}" class="bg-gray-50 p-3 rounded-lg">
+                        ${renderIngredientList(sheet.ingredients, 1)}
+                    </div>
+                `;
+            }
+
+            if (sheet.video) {
+                html += `<h6>📹 فيديو توضيحي</h6><div class="video-placeholder"><a href="${sheet.video}" target="_blank" class="text-amber-700 hover:underline">▶️ شاهد على يوتيوب</a></div>`;
+            }
+            html += `<h6>📊 شبكة تقييم المتكوّن</h6><div class="overflow-x-auto eval-grid">
+                <table class="w-full text-sm border"><thead class="bg-gray-50"><tr><th class="p-1 border">المعيار</th><th class="p-1 border">ممتاز</th><th class="p-1 border">جيد</th><th class="p-1 border">مقبول</th><th class="p-1 border">ضعيف</th></tr></thead>
+                <tbody>
+                    <tr><td class="p-1 border">احترام المقادير</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">تنظيم العمل</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">استعمال الأدوات</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">التشكيل</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">الطهي</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">التشطيب</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">النظافة والسلامة</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">جودة المنتوج</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                    <tr><td class="p-1 border">التقديم</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td><td class="p-1 border">☐</td></tr>
+                </tbody></table>
+            </div>`;
+            return html;
+        }
+
+        function renderIngredientList(ingredients, factor) {
+            if (!ingredients || !Array.isArray(ingredients)) return '<p class="text-gray-500">لا توجد مقادير مسجلة.</p>';
+            let listHtml = '<div class="ingredient-list">';
+            ingredients.forEach(item => {
+                const calculated = (item.amount * factor);
+                const displayAmount = Number.isInteger(calculated) ? calculated : calculated.toFixed(2);
+                listHtml += `<span class="ingredient-item">${item.name}: <strong>${displayAmount}</strong> ${item.unit}</span>`;
+            });
+            listHtml += '</div>';
+            return listHtml;
+        }
+
+        function updateIngredients(sheetId) {
+            const scaleInput = document.getElementById(`scale-${sheetId}`);
+            if (!scaleInput) return;
+            const factor = parseFloat(scaleInput.value) || 1;
+            let sheet = null;
+            for (const mod of programData.almond_pastry.modules) {
+                const found = mod.sheets.find(s => s.id === sheetId);
+                if (found) { sheet = found; break; }
+            }
+            if (!sheet || !sheet.ingredients || !Array.isArray(sheet.ingredients)) return;
+            const displayDiv = document.getElementById(`ingredients-display-${sheetId}`);
+            if (displayDiv) {
+                displayDiv.innerHTML = renderIngredientList(sheet.ingredients, factor);
+            }
+        }
+
+        // =========================================================================
+        // 6. وظائف الإدارة والبحث والطباعة
+        // =========================================================================
+        function toggleSheet(sheetId) {
+            const el = document.getElementById(`sheet-${sheetId}`);
+            if (el) {
+                el.classList.toggle('hidden');
+                const btn = el.closest('.tech-sheet-card').querySelector('.accordion-btn span:last-child');
+                if (btn) btn.textContent = el.classList.contains('hidden') ? '▼' : '▲';
+            }
+        }
+
+        function performSearch(query) {
+            const q = query.toLowerCase().trim();
+            const sheets = document.querySelectorAll('.tech-sheet-card');
+            sheets.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (q === '' || text.includes(q)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        function clearSearch() { document.getElementById('globalSearch').value = ''; performSearch(''); }
+
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden')) renderAdmin();
+        }
+        function renderAdmin() {
+            const container = document.getElementById('adminContent');
+            const prog = programData.almond_pastry;
+            if (!prog) return;
+            let html = `
+                <div class="mb-4"><h4 class="font-bold">📘 البرنامج: ${prog.title}</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                    <div><label>العنوان</label><input type="text" id="admin-prog-title" value="${prog.title}" onchange="updateProgramField('title', this.value)"></div>
+                    <div><label>الوصف</label><input type="text" id="admin-prog-desc" value="${prog.desc}" onchange="updateProgramField('desc', this.value)"></div>
+                    <div><label>المجال</label><input type="text" id="admin-prog-field" value="${prog.field}" onchange="updateProgramField('field', this.value)"></div>
+                    <div><label>الساعات</label><input type="number" id="admin-prog-hours" value="${prog.hours}" onchange="updateProgramField('hours', parseInt(this.value))"></div>
+                    <div><label>المكتسبات القبلية</label><input type="text" id="admin-prog-prereq" value="${prog.prereq}" onchange="updateProgramField('prereq', this.value)"></div>
+                    <div><label>الكفاءة البعدية</label><input type="text" id="admin-prog-postreq" value="${prog.postreq}" onchange="updateProgramField('postreq', this.value)"></div>
+                    <div><label>نوع الكفاءة</label><input type="text" id="admin-prog-type" value="${prog.type}" onchange="updateProgramField('type', this.value)"></div>
+                    <div><label>الحالة</label><select id="admin-prog-status" onchange="updateProgramField('status', this.value)">
+                        <option value="تمت المراجعة" ${prog.status==='تمت المراجعة'?'selected':''}>تمت المراجعة</option>
+                        <option value="قيد التدقيق" ${prog.status==='قيد التدقيق'?'selected':''}>قيد التدقيق</option>
+                        <option value="إعداد الأستاذة" ${prog.status==='إعداد الأستاذة'?'selected':''}>إعداد الأستاذة</option>
+                    </select></div>
+                </div></div>
+                <div class="mb-4"><h4 class="font-bold">⏱️ التوزيع الزمني</h4>
+                <div id="admin-time-distribution">${prog.timeDistribution.map((item, idx) =>
+                    `<div class="flex gap-2 items-center mt-1"><input type="text" value="${item.stage}" class="flex-1" placeholder="المرحلة" onchange="updateTimeDist(${idx}, 'stage', this.value)">
+                    <input type="text" value="${item.duration}" class="w-20" placeholder="المدة" onchange="updateTimeDist(${idx}, 'duration', this.value)">
+                    <input type="text" value="${item.notes||''}" class="flex-1" placeholder="ملاحظات" onchange="updateTimeDist(${idx}, 'notes', this.value)">
+                    <button onclick="removeTimeDist(${idx})" class="text-red-500 text-xs">✕</button></div>`).join('')}</div>
+                <button onclick="addTimeDist()" class="btn-admin bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs mt-2">➕ إضافة مرحلة</button></div>
+                <div><h4 class="font-bold">📚 الوحدات والإضافة صفحة home.html الجديدة
